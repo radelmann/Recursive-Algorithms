@@ -18,10 +18,22 @@
 // Problem #1
 
 // Write a recursive method called countVowels that returns the number of vowels in a given String
-// countVowels('abcedfg') ->2
+var countVowels = function(str) {
+  var count = 0;
 
-var countVowels = function(str){
+  var testFn = function(chr) {
+    if (/[aeiou]/.test(chr)) {
+      return 1;
+    } else {
+      return 0;
+    }
+  }
 
+  if (str.length === 0) return 0;
+  if (str.length === 1) return testFn(str);
+
+  count += testFn(str.charAt(0)) + countVowels(str.slice(1));
+  return count;
 };
 
 ///////////////////////////////////////////////////////////////////////
@@ -34,8 +46,14 @@ var countVowels = function(str){
 // sumDigits(49) → 13
 // sumDigits(12) → 3
 
-var recursiveSum = function(n){
+var recursiveSum = function(n) {
+  var sum = 0;
+  n += '';
+  if (n.length === 1) return parseInt(n);
 
+  sum += parseInt(n.charAt(0)) + recursiveSum(parseInt(n.slice(1)));
+
+  return sum;
 };
 
 ///////////////////////////////////////////////////////////////////////
@@ -47,8 +65,10 @@ var recursiveSum = function(n){
 // PowerOfTwo(8) -> true
 // PowerOfTwo(9) -> false
 
-var isPowerOfTwo = function(n){
+var isPowerOfTwo = function(n) {
+  if (n / 2 === 1) return true;
 
+  return (n % 2 === 0) && isPowerOfTwo(n / 2);
 };
 
 ///////////////////////////////////////////////////////////////////////
@@ -64,8 +84,16 @@ var isPowerOfTwo = function(n){
 // (For example, if the initial investment is 1000 and the interest rate is 10 percent,
 // then after one year the investment will be worth 1100, after two years 1210, after three years 1331, etc.)
 
-var invest = function(amount){
+var invest = function(amount, rate, years) {
 
+  var interest = function() {
+    return amount / rate;
+  }
+
+  if (years === 1) return amount + interest();
+
+  amount += interest();
+  return invest(amount, rate, years - 1);
 };
 
 ///////////////////////////////////////////////////////////////////////
@@ -81,9 +109,16 @@ var invest = function(amount){
 // ex:
 //    printRangeUpDown(4, 10);
 //    console.logs: 4,5,6,7,8,9,10,9,8,7,6,5,4
-var printRangeUpDown = function(min, max){
+var printRangeUpDown = function(min, max) {
+  //base case
+  if (min === max) return min + '';
 
+  var results = min + ',' + printRangeUpDown(min + 1, max) + ',' + min;
+
+  return results;
 };
+
+console.log(printRangeUpDown(4, 10));
 
 ///////////////////////////////////////////////////////////////////////
 ///////////////////////////////////////////////////////////////////////
@@ -96,8 +131,15 @@ var printRangeUpDown = function(min, max){
 // remember, binary tree's are different from binary search trees!
 // you'll need to create a binary tree constructor!
 
-var binaryTreeSum = function(tree){
+var binaryTreeSum = function(tree) {
+  if (!tree) return 0;
 
+  var sum = 0;
+  sum += tree.value;
+  sum += binaryTreeSum(tree.left);
+  sum += binaryTreeSum(tree.right);
+
+  return sum;
 };
 
 ///////////////////////////////////////////////////////////////////////
@@ -119,6 +161,28 @@ var binaryTreeSum = function(tree){
 //                    8
 
 // you'll need to create a binary search tree constructor!
-var arrayToBinarySearchTree = function(array){
+var arrayToBinarySearchTree = function(array) {
+  var results = [];
 
+  result.push(this.value);
+
+  if (!this.right) {
+    results = results.concat(arrayToBinarySearchTree(this.left));
+  }
+
+  if (!this.left) {
+    results = results.concat(arrayToBinarySearchTree(this.right));
+  }
+
+  if (this.left && this.right) {
+    var left = arrayToBinarySearchTree(this.left);
+    var right = arrayToBinarySearchTree(this.right);
+
+    if (left.length > right.length) {
+      results = results.concat(left);
+    } else {
+      results = results.concat(right);
+    }
+  }
+  return results;
 };
