@@ -118,8 +118,6 @@ var printRangeUpDown = function(min, max) {
   return results;
 };
 
-console.log(printRangeUpDown(4, 10));
-
 ///////////////////////////////////////////////////////////////////////
 ///////////////////////////////////////////////////////////////////////
 ///////////////////////////////////////////////////////////////////////
@@ -161,28 +159,48 @@ var binaryTreeSum = function(tree) {
 //                    8
 
 // you'll need to create a binary search tree constructor!
-var arrayToBinarySearchTree = function(array) {
-  var results = [];
+var BinarySearchTree = function(value) {
+  this.value = value;
+  this.left = null;
+  this.right = null;
+}
 
-  result.push(this.value);
-
-  if (!this.right) {
-    results = results.concat(arrayToBinarySearchTree(this.left));
-  }
-
-  if (!this.left) {
-    results = results.concat(arrayToBinarySearchTree(this.right));
-  }
-
-  if (this.left && this.right) {
-    var left = arrayToBinarySearchTree(this.left);
-    var right = arrayToBinarySearchTree(this.right);
-
-    if (left.length > right.length) {
-      results = results.concat(left);
+BinarySearchTree.prototype.insert = function(value) {
+  var set = function(node, value) {
+    if (node) {
+      node.insert(value);
     } else {
-      results = results.concat(right);
+      node = new BinarySeachTree(value);
     }
+    return node;
   }
-  return results;
+
+  if (value < this.value) {
+    this.left = set(this.left, value);
+  } else {
+    this.right = set(this.right, value);
+  }
+}
+
+//create balanced Binary Search Tree from sorted array
+Array.prototype.toBinarySearchTree = function() {
+  if (this.length === 0) return;
+  if (this.length === 1) return new BinarySearchTree(this[0]);
+
+  var mid = Math.floor(this.length / 2);
+
+  var left = this.slice(0, mid);
+  var right = this.slice(mid + 1);
+
+  //create binary search tree with array midpoint
+  var bTree = new BinarySearchTree(this[mid]);
+
+  bTree.left = left.toBinarySearchTree();
+  bTree.right = right.toBinarySearchTree();
+
+  return bTree;
 };
+
+var array = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10];
+var bTree = array.toBinarySearchTree();
+console.dir(bTree);
